@@ -1,3 +1,5 @@
+package tda;
+
 public class BinarySearchTree<ELEMENT extends Comparable<ELEMENT>> extends BinaryTree<ELEMENT> {
     public BinarySearchTree() {
         super();

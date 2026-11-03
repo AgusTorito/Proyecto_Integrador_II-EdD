@@ -1,3 +1,5 @@
+package tda;
+
 public class Arreglo<T> {
     private T[] vector;
     private int ce;          // Cantidad  de elementos cargados

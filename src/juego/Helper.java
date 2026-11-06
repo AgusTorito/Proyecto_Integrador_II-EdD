@@ -15,6 +15,7 @@ public class Helper {
             if (!entrada.isEmpty()) {
                 break;
             }
+            //sc.next();
             System.out.println("Error: El campo no puede estar vacío. Intente nuevamente.");
         }
         return entrada;
@@ -57,9 +58,9 @@ public class Helper {
         int edad;
         while (true){
             edad = sc.nextInt();
-            if (edad < 0 || edad > 120) {
-                throw new IllegalArgumentException(
-                        "La edad debe estar entre " + 0 + " y " + 120);
+            if (edad < 18) {
+                System.out.println ("La edad debe ser mayor a " + 18);
+
             }else return edad;
         }
     }

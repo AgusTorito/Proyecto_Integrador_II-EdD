@@ -4,20 +4,27 @@ import juego.Helper;
 import modelo.Jugador;
 import modelo.Mazo;
 import modelo.Naipe;
+import tda.SimpleLinkedList;
 
 import java.util.Scanner;
+import java.util.SimpleTimeZone;
 
 public class App {
+    private static final Scanner sc = new Scanner(System.in);
+    private static SimpleLinkedList<Jugador> jugadores = new SimpleLinkedList<Jugador>();
     private static final int TOTAL_RONDAS = 4;
 
+
     static void main() {
+        SimpleLinkedList<Jugador> Inscrfipts = new SimpleLinkedList<Jugador>();
 
         Scanner sc = new Scanner(System.in);
         menu();
     }
 
-    private static void jugar() {
+    private static void jugar(SimpleLinkedList<Jugador> j) {
         Mazo mazo = new Mazo();
+        seleccionarJug(j);
         Jugador[] jugadores = {
                 new Jugador("123", "Ibarra", "perez", 25),
                 new Jugador("123", "Jose", "perez", 25),
@@ -43,6 +50,15 @@ public class App {
         }
 
     }
+
+    private static Jugador[] seleccionarJug(SimpleLinkedList<Jugador> jugadors) {
+        Jugador[] jugadores= {new Jugador(),new Jugador(),new Jugador(),new Jugador()};
+
+        //logica dinde agregas reemplazas los jugadore dels lista jugador
+        return jugadores;
+
+    }
+
     public static Jugador verGanador(Jugador[] jugadores) {
         Jugador ganador = jugadores[0];
         for (Jugador jugador : jugadores) {
@@ -99,16 +115,52 @@ public class App {
     }
 
     private static void ranking() {
+
     }
 
     private static void inscripcion() {
 
+        System.out.println("Inscripcion");
+        System.out.println("1-- inscribi\n" +
+                "2--salir\n" );
+        int input = Helper.leerEnteroPositivo(sc,"Ingrese la opcion deseada");
+        switch ( input){
+            case 1:
+                String bandera = "S";
+                while (bandera.equalsIgnoreCase("S")){
+                    Jugador jugador;
+                    String nombre = Helper.leerString(sc,"Nombre del jugador: ");
+                    String apellido = Helper.leerString(sc,"Apellido del jugador: ");
 
+                    String dni = Helper.leerString(sc,"Ingrese el dni: ");
+                    System.out.println("Ingrese la edad: ");
+                    //sc.close();
+                    int edad= Helper.validarEdad(sc);
+                    sc.nextLine();
+                    jugador =new Jugador(dni,nombre,apellido,edad);
+                    jugadores.addLast(jugador);
+                    System.out.println("            desea agregar mas ? S/N");
+                    bandera = Helper.leerString(sc,"ingrese S o N");
+                    //sc.next();
+                    if (bandera.equalsIgnoreCase("N")) {
+                        menu();
+                        break;
+                    }
+                }
+                break;
+            case 2:
+                menu();
+                break;
+            default:
+                System.out.println("Las opciones deben estra ente 1 y 2");
+                menu();
+        }
 
     }
 
+
     private static void menu() {
-        Scanner sc = new Scanner(System.in);
+
         System.out.println("MENU");
         System.out.println("1-- inscripcion\n" +
                 "2--ranking\n" +
@@ -117,13 +169,14 @@ public class App {
 
         switch ( input){
             case 1:
+                System.out.println(jugadores);
                 inscripcion();
                 break;
             case 2:
                 ranking();
                 break;
             case 3:
-                jugar();
+                jugar(jugadores);
                 break;
             default:
                 System.out.println("Las opciones deben estra ente 1 y 3");

@@ -1,82 +1,89 @@
 package modelo;
 
-import java.util.Iterator;
-
+import juego.Helper;
 import tda.SimpleLinkedList;
 
-public class Jugador implements Comparable<Jugador> {
+import java.net.PortUnreachableException;
+
+public class Jugador{
+    //public class Jugador implements Comparable<modelo.Jugador> {
+    //quite la implementacion de comparable si la necesitan la vuelven a descomentar
 
     public static final int CARTAS_POR_RONDA = 3;
-
-    private static final int EDAD_MINIMA = 1;
-    private static final int EDAD_MAXIMA = 120;
+    //Uso esta variable para autoincrementar el id del jugador ahora ya no se pasa por parametr
+    private static int contadorID = 0;
 
     private final String dni;
     private String nombre;
     private String apellido;
     private int edad;
     private final int numeroJugador;
-    private double puntaje;
-    private double puntajeJuego;
+
+    private double puntajeRanking;
+    private double puntajeRonda;
+
     private SimpleLinkedList<Naipe> miBolsa;
     private Naipe[] mano;
 
-    public Jugador(String dni, String nombre, String apellido, int edad, int numeroJugador) {
-        validarDni(dni);
-        validarTextoNoVacio(nombre, "El nombre no puede estar vacio");
-        validarTextoNoVacio(apellido, "El apellido no puede estar vacio");
-        validarEdad(edad);
-        if (numeroJugador <= 0) {
-            throw new IllegalArgumentException("El numero de jugador debe ser positivo");
-        }
-
+    public Jugador(String dni, String nombre, String apellido, int edad) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
         this.edad = edad;
-        this.numeroJugador = numeroJugador;
-        this.puntaje = 0;
-        this.puntajeJuego = 0;
+        this.numeroJugador = ++contadorID;
+        this.puntajeRanking =  0;
+        this.puntajeRonda= 0;
+
         this.miBolsa = new SimpleLinkedList<>();
-        this.mano = new Naipe[0];
+        this.mano = new Naipe[CARTAS_POR_RONDA];
+    }
+    //jugadr sin paraetros
+    public Jugador() {
+        this.dni = "none";
+        this.nombre = "none";
+        this.apellido = "none";
+        this.edad = 0;
+        this.numeroJugador = 0;
+        this.puntajeRanking =  0;
+        this.puntajeRonda= 0;
+        this.miBolsa = null;
+        this.mano = null;
     }
 
-    public String getDni() {
-        return dni;
+    public String getNombre() { return nombre + " " + apellido; }
+
+    public double getPuntajeRonda() {
+        return puntajeRonda;
     }
 
-    public String getNombre() {
-        return nombre;
+    public void setPuntajeRonda(double puntajeRonda) {
+        this.puntajeRonda = puntajeRonda;
     }
 
-    public void setNombre(String nombre) {
-        validarTextoNoVacio(nombre, "El nombre no puede estar vacio");
-        this.nombre = nombre;
+
+
+    public Naipe[] getMano() {
+        return mano.clone();
     }
 
-    public String getApellido() {
-        return apellido;
+    public void setPuntajeRanking(double nuevoPuntaje) {
+        if (nuevoPuntaje > this.puntajeRanking) {
+            this.puntajeRanking = nuevoPuntaje ;
+        }
     }
 
-    public void setApellido(String apellido) {
-        validarTextoNoVacio(apellido, "El apellido no puede estar vacio");
-        this.apellido = apellido;
+    //Creo como sugerencia quepodrian usar este metodo par ordenar en un arbol para el ranking
+    public double getPuntajeRanking() {return puntajeRanking;}
+
+    public int cantidadCartasGanadas() {
+        return miBolsa.size();
+    }
+    //esto nose que onda pero calculo quese puede hacer una especie de historial de las ultimas cartas con las que gano el jugador X
+    public SimpleLinkedList<Naipe> getMiBolsa() {
+        return miBolsa;
     }
 
-    public int getEdad() {
-        return edad;
-    }
-
-    public void setEdad(int edad) {
-        validarEdad(edad);
-        this.edad = edad;
-    }
-
-    public int getNumeroJugador() {
-        return numeroJugador;
-    }
-
-    /** Recibe las 3 cartas de la ronda actual (reemplaza la mano anterior). */
+//Recine los 3 naipes de la ronda y los copia en el atributo mano
     public void recibirMano(Naipe[] cartas) {
         if (cartas == null || cartas.length != CARTAS_POR_RONDA) {
             throw new IllegalArgumentException("Cada jugador recibe " + CARTAS_POR_RONDA + " cartas por ronda");
@@ -88,82 +95,27 @@ public class Jugador implements Comparable<Jugador> {
         }
         this.mano = cartas.clone();
     }
-
-    /** Devuelve una copia de la mano actual. */
-    public Naipe[] getMano() {
-        return mano.clone();
-    }
-
-    /** Puntaje de la mano actual, con la regla del As (para comparar en la ronda). */
-    public double calcularPuntajeRonda() {
-        return Naipe.puntajeDeCartas(mano);
-    }
-
-    /** Descarta la mano al terminar la ronda. */
-    public void limpiarMano() {
-        this.mano = new Naipe[0];
-    }
-
-    //Registra el resultado de una ronda
-
-    public void registrarRonda(Naipe[] cartasDeLaRonda) {
-        double puntajeRonda = Naipe.puntajeDeCartas(cartasDeLaRonda);
-        for (Naipe carta : cartasDeLaRonda) {
-            miBolsa.addLast(carta);
+    public double calcularPuntajeBolsa() {
+        double total = 0;
+        for (Naipe carta : miBolsa) {      // SimpleLinkedList es Iterable
+            total += carta.getValor();
         }
-        this.puntajeJuego += puntajeRonda;
+        return total;
     }
-
-    // Juego y ranking
-
-    public double calcularPuntajeJuego() {
-        return puntajeJuego;
+    public double calcularPuntajeMano() {
+        return Helper.puntajeMano(mano);
     }
+    //Registra el resultado de una ronda Ganada
 
-    public SimpleLinkedList<Naipe> getMiBolsa() {
-        return miBolsa;
-    }
-
-    public int cantidadCartasGanadas() {
-        return miBolsa.size();
-    }
-
-    /**
-     * guarda el puntaje del juego como puntaje del ranking si es mayor
-     * que el anterior, y prepara al jugador para un nuevo juego.
-     */
-    public void finalizarJuego() {
-        if (puntajeJuego > this.puntaje) {
-            this.puntaje = puntajeJuego;
+    public void guardarNaipesActualizarRanking(Naipe [] naipesGanados) {
+        double puntajeGanado =0 ;
+        for (Naipe naipe : naipesGanados) {
+            puntajeGanado +=naipe.getValor();
+            miBolsa.addLast(naipe);
         }
-        reiniciarJuego();
+        this.puntajeRanking += puntajeGanado;
     }
 
-    /** Vacia miBolsa, la mano y el puntaje del juego (el puntaje del ranking no cambia). */
-    public void reiniciarJuego() {
-        while (miBolsa.size() > 0) {
-            miBolsa.removeFirst();
-        }
-        this.puntajeJuego = 0;
-        this.mano = new Naipe[0];
-    }
-
-    // Mayor puntaje obtenido en los juegos jugados 
-    public double getPuntaje() {
-        return puntaje;
-    }
-
-    //Ordena el ABB del ranking de menor a mayor puntaje;
-    @Override
-    public int compareTo(Jugador otro) {
-        int cmp = Double.compare(this.puntaje, otro.puntaje);
-        if (cmp != 0) {
-            return cmp;
-        }
-        return Integer.compare(this.numeroJugador, otro.numeroJugador);
-    }
-
-    // Auxiliares, colocarlos en el helper o eliminarlos si no hace falta.
     @Override
     public String toString() {
         return "Jugador{" +
@@ -172,32 +124,29 @@ public class Jugador implements Comparable<Jugador> {
                 ", Nombre='" + nombre + '\'' +
                 ", Apellido='" + apellido + '\'' +
                 ", Edad=" + edad +
-                ", Puntaje=" + puntaje +
+                ", Puntaje=" + puntajeRanking +
                 ", Cartas ganadas=" + miBolsa.size() +
                 '}';
     }
 
-    private static void validarDni(String dni) {
-        if (dni == null || dni.isEmpty()) {
-            throw new IllegalArgumentException("El DNI no puede estar vacio");
-        }
-        for (int i = 0; i < dni.length(); i++) {
-            if (!Character.isDigit(dni.charAt(i))) {
-                throw new IllegalArgumentException("El DNI debe contener solo numeros");
-            }
-        }
-    }
+    /** Vacia miBolsa, la mano y el puntaje del juego (el puntaje del ranking no cambia). */
+//    public void reiniciarJuego() {
+//        while (miBolsa.size() > 0) {
+//            miBolsa.removeFirst();
+//        }
+//        this.puntajeJuego = 0;
+//        this.mano = new Naipe[0];
+//    }
+    //esto nose que onda como se usa calculoques sirve para ver si hay otro jugador con el mismo numero pero creo que esto no es ncecearoo
+    //Ordena el ABB del ranking de menor a mayor puntaje;//   @Override
+//    public int compareTo(Jugador otro) {
+//        int cmp = Double.compare(this.puntaje, otro.puntaje);
+//        if (cmp != 0) {
+//            return cmp;
+//        }
+//        return Integer.compare(this.numeroJugador, otro.numeroJugador);
+//    }
 
-    private static void validarEdad(int edad) {
-        if (edad < EDAD_MINIMA || edad > EDAD_MAXIMA) {
-            throw new IllegalArgumentException(
-                    "La edad debe estar entre " + EDAD_MINIMA + " y " + EDAD_MAXIMA);
-        }
-    }
+    // Auxiliares, colocarlos en el helper o eliminarlos si no hace falta.
 
-    private static void validarTextoNoVacio(String texto, String mensaje) {
-        if (texto == null || texto.trim().isEmpty()) {
-            throw new IllegalArgumentException(mensaje);
-        }
-    }
 }

@@ -1,4 +1,6 @@
-package principal;
+package juego;
+
+import modelo.Naipe;
 
 import java.util.Scanner;
 
@@ -51,24 +53,54 @@ public class Helper {
         }
         return numero;
     }
-
-    //Validación de Edad (Rango: 12 a 100 años)
-    public static int leerEdadReal(Scanner sc, String mensaje) {
-        int edad = -1;
-        while (true) {
-            System.out.print(mensaje);
-            String entrada = sc.nextLine().trim();
-            try {
-                edad = Integer.parseInt(entrada);
-                // Rango coherente para estudiantes de secundario/universidad y participantes
-                if (edad >= 12 && edad <= 100) {
-                    break;
-                }
-                System.out.println("Error: La edad debe ser un valor realista (entre 12 y 100 años).");
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Debe ingresar un número entero para la edad.");
+    public static int validarEdad(Scanner sc) {
+        int edad;
+        while (true){
+            edad = sc.nextInt();
+            if (edad < 0 || edad > 120) {
+                throw new IllegalArgumentException(
+                        "La edad debe estar entre " + 0 + " y " + 120);
+            }else return edad;
+        }
+    }
+    public static double puntajeMano(Naipe[] cartas) {
+        if (cartas == null) {
+            throw new IllegalArgumentException("El arreglo de cartas no puede ser nulo");
+        }
+        double suma = 0;
+        boolean hayAs = false;
+        for (Naipe carta : cartas) {
+            if (carta == null) {
+                throw new IllegalArgumentException("Ninguna carta puede ser nula");
+            }
+            suma += carta.getValor();
+            if (carta.esAs()) {
+                hayAs = true;
             }
         }
-        return edad;
+        return hayAs ? suma * 2 : suma;
     }
+
+    public static String validarDni(Scanner sc) {
+        String dniValue ;
+        while (true) {
+            try {
+                dniValue = sc.nextLine();
+                if (dniValue == null || dniValue.isEmpty()) {
+                    throw new IllegalArgumentException("El DNI no puede estar vacio");
+                }
+                for (int i = 0; i < dniValue.length(); i++) {
+                    if (!Character.isDigit(dniValue.charAt(i))) {
+                        throw new IllegalArgumentException("El DNI debe contener solo numeros");
+                    }
+                }
+                return dniValue;
+            } catch (Exception exception) {
+                System.out.println("ErrV-Dni");
+            }
+        }
+    }
+
+
+
 }

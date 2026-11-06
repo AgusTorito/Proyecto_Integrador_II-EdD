@@ -2,7 +2,7 @@ package tda;
 
 public class Stack<ELEMENT> {
 
-    private final static Integer defaulDimension = 10;
+    private final static Integer defaulDimension = 54;
 
     private ELEMENT [] data;
     private Integer count;

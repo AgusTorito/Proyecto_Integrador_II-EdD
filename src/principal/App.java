@@ -11,6 +11,7 @@ public class App {
     private static final int TOTAL_RONDAS = 4;
 
     static void main() {
+
         Scanner sc = new Scanner(System.in);
         menu();
     }
@@ -22,32 +23,30 @@ public class App {
                 new Jugador("123", "Jose", "perez", 25),
                 new Jugador("123", "Lauty", "Aima", 25),
                 new Jugador("123", "Rafa", "Fascio", 25)};
-
+        Jugador ganador = null;
         for (int ronda = 1; ronda <= TOTAL_RONDAS; ronda++) {
             System.out.println("        Ronda " + ronda );
 
-            repartiAJugadores(jugadores, mazo);
-
             // los jugadors muestran su mano y se guarda su puntaje de la ronda
+            repartiAJugadores(jugadores, mazo);
             for (Jugador jugador : jugadores) {
+
                 jugador.setPuntajeRonda(jugador.calcularPuntajeMano());
+                ganador = verGanador(jugadores);
+                ganador.guardarNaipesActualizarRanking(cartasDeLaRonda(jugadores));
             }
             mostrarManos(jugadores);
-
-            // el ganador de la ronda se lleva las cartas de todos a su bolsa
-            Jugador ganador = verGanador(jugadores);
-            ganador.guardarNaipesActualizarRanking(cartasDeLaRonda(jugadores));
-
+            
             System.out.println("        gana la ronda " + ronda + " " + ganador.getNombre()
-                    + " con " + ganador.getPuntajeRonda() + " puntos");
+                    + " con " + ganador.getPuntajeRonda(3) + " puntos");
+            //anunciarGanadorJuego(jugadores);
         }
 
-        anunciarGanadorJuego(jugadores);
     }
     public static Jugador verGanador(Jugador[] jugadores) {
         Jugador ganador = jugadores[0];
         for (Jugador jugador : jugadores) {
-            if (jugador.getPuntajeRonda() > ganador.getPuntajeRonda()) {
+            if (jugador.getPuntajeRonda(3) > ganador.getPuntajeRonda(3)) {
                 ganador = jugador;
             }
         }
@@ -68,7 +67,7 @@ public class App {
             for (Naipe carta : jugador.getMano()) {
                 System.out.print("[" + carta+"]");
             }
-            System.out.println("   Total: " + jugador.getPuntajeRonda());
+            System.out.println("   Total: " + jugador.getPuntajeRonda(3));
         }
     }
     private static Naipe[] cartasDeLaRonda(Jugador[] jugadores) {
@@ -103,6 +102,9 @@ public class App {
     }
 
     private static void inscripcion() {
+
+
+
     }
 
     private static void menu() {

@@ -4,7 +4,7 @@ public class Naipe {
 
     public static final String[] PALOS_POSIBLES = {"diamante", "corazon", "pica", "trebol"," comodin "};
 
-    public static final int[] VALORES_POSIBLES = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,100};
+    public static final int[] VALORES_POSIBLES = {0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,100};
 
 
     private String tipo;

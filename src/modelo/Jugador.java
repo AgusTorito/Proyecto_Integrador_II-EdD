@@ -3,9 +3,7 @@ package modelo;
 import juego.Helper;
 import tda.SimpleLinkedList;
 
-import java.net.PortUnreachableException;
-
-public class Jugador{
+public class Jugador implements Comparable<modelo.Jugador> {
     //public class Jugador implements Comparable<modelo.Jugador> {
     //quite la implementacion de comparable si la necesitan la vuelven a descomentar
 
@@ -52,7 +50,7 @@ public class Jugador{
 
     public String getNombre() { return nombre + " " + apellido; }
 
-    public double getPuntajeRonda() {
+    public double getPuntajeRonda(int i) {
         return puntajeRonda;
     }
 
@@ -139,13 +137,13 @@ public class Jugador{
 //    }
     //esto nose que onda como se usa calculoques sirve para ver si hay otro jugador con el mismo numero pero creo que esto no es ncecearoo
     //Ordena el ABB del ranking de menor a mayor puntaje;//   @Override
-//    public int compareTo(Jugador otro) {
-//        int cmp = Double.compare(this.puntaje, otro.puntaje);
-//        if (cmp != 0) {
-//            return cmp;
-//        }
-//        return Integer.compare(this.numeroJugador, otro.numeroJugador);
-//    }
+    public int compareTo(Jugador otro) {
+        int cmp = Double.compare(this.puntajeRanking, otro.puntajeRanking);
+        if (cmp != 0) {
+            return cmp;
+        }
+        return Integer.compare(this.numeroJugador, otro.numeroJugador);
+    }
 
     // Auxiliares, colocarlos en el helper o eliminarlos si no hace falta.
 

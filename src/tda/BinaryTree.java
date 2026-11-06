@@ -22,6 +22,7 @@ public class BinaryTree<ELEMENT> {
         public BTNode(ELEMENT item) {
             this(item, null, null);
         }
+
         public BTNode(ELEMENT item, BTNode<ELEMENT> left, BTNode<ELEMENT> right) {
             this.item = item;
             this.left = left;

@@ -48,6 +48,10 @@ public class Jugador implements Comparable<modelo.Jugador> {
         this.mano = null;
     }
 
+    public int getNumeroJugador() {
+        return numeroJugador;
+    }
+
     public String getNombre() { return nombre + " " + apellido; }
 
     public double getPuntajeRonda(int i) {

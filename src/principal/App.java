@@ -4,8 +4,11 @@ import juego.Helper;
 import modelo.Jugador;
 import modelo.Mazo;
 import modelo.Naipe;
+import tda.BinarySearchTree;
+import tda.BinaryTree;
 import tda.SimpleLinkedList;
 
+import java.util.Random;
 import java.util.Scanner;
 import java.util.SimpleTimeZone;
 
@@ -22,14 +25,9 @@ public class App {
         menu();
     }
 
-    private static void jugar(SimpleLinkedList<Jugador> j) {
+    private static void jugar() {
         Mazo mazo = new Mazo();
-        seleccionarJug(j);
-        Jugador[] jugadores = {
-                new Jugador("123", "Ibarra", "perez", 25),
-                new Jugador("123", "Jose", "perez", 25),
-                new Jugador("123", "Lauty", "Aima", 25),
-                new Jugador("123", "Rafa", "Fascio", 25)};
+        Jugador[] jugadores = seleccionarJug();
         Jugador ganador = null;
         for (int ronda = 1; ronda <= TOTAL_RONDAS; ronda++) {
             System.out.println("        Ronda " + ronda );
@@ -43,7 +41,7 @@ public class App {
                 ganador.guardarNaipesActualizarRanking(cartasDeLaRonda(jugadores));
             }
             mostrarManos(jugadores);
-            
+
             System.out.println("        gana la ronda " + ronda + " " + ganador.getNombre()
                     + " con " + ganador.getPuntajeRonda(3) + " puntos");
             //anunciarGanadorJuego(jugadores);
@@ -51,11 +49,20 @@ public class App {
 
     }
 
-    private static Jugador[] seleccionarJug(SimpleLinkedList<Jugador> jugadors) {
-        Jugador[] jugadores= {new Jugador(),new Jugador(),new Jugador(),new Jugador()};
+    private static Jugador[] seleccionarJug() {
+
+        Jugador[] seleccionados= {new Jugador(),new Jugador(),new Jugador(),new Jugador()};
+        Jugador aux  = new Jugador();
+        for (int i = 0; i < seleccionados.length ; i++) {
+            aux  = jugadores.removeFirst();
+            seleccionados[i] = aux;
+            jugadores.addLast(aux);
+        }
+
+
 
         //logica dinde agregas reemplazas los jugadore dels lista jugador
-        return jugadores;
+        return seleccionados;
 
     }
 
@@ -79,7 +86,7 @@ public class App {
     }
     private static void mostrarManos(Jugador[] jugadores) {
         for (Jugador jugador : jugadores) {
-            System.out.print(jugador.getNombre() + " 3:");
+            System.out.print(jugador.getNombre() + " :");
             for (Naipe carta : jugador.getMano()) {
                 System.out.print("[" + carta+"]");
             }
@@ -96,25 +103,13 @@ public class App {
         }
         return todas;
     }
-    private static void anunciarGanadorJuego(Jugador[] jugadores) {
-        double max = 0;
-        for (Jugador jugador : jugadores) {
-            double puntos = jugador.calcularPuntajeBolsa();
-            System.out.println(jugador.getNombre() + ": " + puntos + " puntos");
-            jugador.setPuntajeRanking(puntos);
-            if (puntos > max) {
-                max= puntos;
-            }
-        }
-        System.out.print("      GANADOR:");
-        for (Jugador jugador : jugadores) {
-            if (jugador.calcularPuntajeBolsa() == max) {
-                System.out.println(" -----------" + jugador + " con " + max + " puntos-----------");
-            }
-        }
-    }
 
-    private static void ranking() {
+    private static BinarySearchTree<Jugador> ranking() {
+        BinarySearchTree<Jugador> ranking = new BinarySearchTree<Jugador>();
+        for (Jugador jugador : jugadores) {
+            ranking.add(jugador);
+        }
+        return ranking;
 
     }
 
@@ -169,14 +164,22 @@ public class App {
 
         switch ( input){
             case 1:
+                System.out.println("INSCRIPCION");
                 System.out.println(jugadores);
                 inscripcion();
+
                 break;
             case 2:
-                ranking();
+                System.out.println("RANKING");
+                System.out.println(ranking());
+
+
                 break;
             case 3:
-                jugar(jugadores);
+                System.out.println("JUEGO");
+                jugar();
+                menu();
+
                 break;
             default:
                 System.out.println("Las opciones deben estra ente 1 y 3");

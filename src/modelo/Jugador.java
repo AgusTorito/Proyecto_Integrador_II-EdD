@@ -1,9 +1,10 @@
 package modelo;
 
 import juego.Helper;
+import tda.BinarySearchTree;
 import tda.SimpleLinkedList;
 
-public class Jugador implements Comparable<modelo.Jugador> {
+public class Jugador extends BinarySearchTree<Jugador> implements Comparable<modelo.Jugador> {
     //public class Jugador implements Comparable<modelo.Jugador> {
     //quite la implementacion de comparable si la necesitan la vuelven a descomentar
 
@@ -48,9 +49,9 @@ public class Jugador implements Comparable<modelo.Jugador> {
         this.mano = null;
     }
 
-    public int getNumeroJugador() {
-        return numeroJugador;
-    }
+    //public int getNumeroJugador() {
+        //return numeroJugador;
+    //}
 
     public String getNombre() { return nombre + " " + apellido; }
 
@@ -122,10 +123,10 @@ public class Jugador implements Comparable<modelo.Jugador> {
     public String toString() {
         return "Jugador{" +
                 "Nro=" + numeroJugador +
-                ", DNI='" + dni + '\'' +
+
                 ", Nombre='" + nombre + '\'' +
                 ", Apellido='" + apellido + '\'' +
-                ", Edad=" + edad +
+
                 ", Puntaje=" + puntajeRanking +
                 ", Cartas ganadas=" + miBolsa.size() +
                 '}';

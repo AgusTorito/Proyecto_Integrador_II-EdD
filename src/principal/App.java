@@ -14,12 +14,20 @@ import java.util.SimpleTimeZone;
 
 public class App {
     private static final Scanner sc = new Scanner(System.in);
-    private static SimpleLinkedList<Jugador> jugadores = new SimpleLinkedList<Jugador>();
+    private static final SimpleLinkedList<Jugador> jugadores = new SimpleLinkedList<Jugador>();
     private static final int TOTAL_RONDAS = 4;
 
 
+
     static void main() {
-        SimpleLinkedList<Jugador> Inscrfipts = new SimpleLinkedList<Jugador>();
+
+        jugadores.addFirst(new Jugador("12763215","Jose","Marquez",25));
+        jugadores.addFirst(new Jugador("12763215","Lucas","Martinelii",25));
+        jugadores.addFirst(new Jugador("12763215","Franco","Sajama",25));
+        jugadores.addFirst(new Jugador("12763215","Luciano","Pereira",25));
+        jugadores.addFirst(new Jugador("12763215","Lautaro","Martines",25));
+        jugadores.addFirst(new Jugador("12763215","Belen","Castro",25));
+        //SimpleLinkedList<Jugador> Inscrfipts = new SimpleLinkedList<Jugador>();
 
         Scanner sc = new Scanner(System.in);
         menu();
@@ -105,6 +113,7 @@ public class App {
     }
 
     private static BinarySearchTree<Jugador> ranking() {
+
         BinarySearchTree<Jugador> ranking = new BinarySearchTree<Jugador>();
         for (Jugador jugador : jugadores) {
             ranking.add(jugador);
@@ -171,9 +180,9 @@ public class App {
                 break;
             case 2:
                 System.out.println("RANKING");
-                System.out.println(ranking());
-
-
+                BinarySearchTree<Jugador> rnk = ranking();
+                rnk.DescendingOrder();
+                menu();
                 break;
             case 3:
                 System.out.println("JUEGO");

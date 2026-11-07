@@ -121,15 +121,15 @@ public class Jugador extends BinarySearchTree<Jugador> implements Comparable<mod
 
     @Override
     public String toString() {
-        return "Jugador{" +
+        return "Jugador" +
                 "Nro=" + numeroJugador +
 
                 ", Nombre='" + nombre + '\'' +
-                ", Apellido='" + apellido + '\'' +
+                ", Apellido='" + apellido + '\''  +
+                ", Cartas ganadas=" + miBolsa.size()+
 
-                ", Puntaje=" + puntajeRanking +
-                ", Cartas ganadas=" + miBolsa.size() +
-                '}';
+        "            Puntaje=" + puntajeRanking+"\n";
+
     }
 
     /** Vacia miBolsa, la mano y el puntaje del juego (el puntaje del ranking no cambia). */

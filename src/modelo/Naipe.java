@@ -46,11 +46,15 @@ public class Naipe {
 
     /** true si la carta es un As (valor 1, no comodin). */
     public boolean esAs() {
-        return !esComodin() && valor == 1;
+        return !esComodin() && valor == 0;
     }
 
     @Override
     public String toString() {
+
+        if (valor == 0) {
+            return "As de " + tipo;
+        }
         return valor + " de " + tipo;
     }
 

@@ -55,7 +55,7 @@ public class Jugador extends BinarySearchTree<Jugador> implements Comparable<mod
 
     public String getNombre() { return nombre + " " + apellido; }
 
-    public double getPuntajeRonda(int i) {
+    public double getPuntajeRonda() {
         return puntajeRonda;
     }
 
@@ -70,21 +70,13 @@ public class Jugador extends BinarySearchTree<Jugador> implements Comparable<mod
     }
 
     public void setPuntajeRanking(double nuevoPuntaje) {
-        if (nuevoPuntaje > this.puntajeRanking) {
-            this.puntajeRanking = nuevoPuntaje ;
-        }
+            this.puntajeRanking += nuevoPuntaje ;
     }
 
     //Creo como sugerencia quepodrian usar este metodo par ordenar en un arbol para el ranking
     public double getPuntajeRanking() {return puntajeRanking;}
 
-    public int cantidadCartasGanadas() {
-        return miBolsa.size();
-    }
-    //esto nose que onda pero calculo quese puede hacer una especie de historial de las ultimas cartas con las que gano el jugador X
-    public SimpleLinkedList<Naipe> getMiBolsa() {
-        return miBolsa;
-    }
+
 
 //Recine los 3 naipes de la ronda y los copia en el atributo mano
     public void recibirMano(Naipe[] cartas) {
@@ -98,25 +90,22 @@ public class Jugador extends BinarySearchTree<Jugador> implements Comparable<mod
         }
         this.mano = cartas.clone();
     }
-    public double calcularPuntajeBolsa() {
-        double total = 0;
-        for (Naipe carta : miBolsa) {      // SimpleLinkedList es Iterable
-            total += carta.getValor();
-        }
-        return total;
-    }
+//    public double calcularPuntajeBolsa() {
+//        double total = 0;
+//        for (Naipe carta : miBolsa) {      // SimpleLinkedList es Iterable
+//            total += carta.getValor();
+//        }
+//        return total;
+//    }
     public double calcularPuntajeMano() {
         return Helper.puntajeMano(mano);
     }
     //Registra el resultado de una ronda Ganada
 
-    public void guardarNaipesActualizarRanking(Naipe [] naipesGanados) {
-        double puntajeGanado =0 ;
+    public void guardarNaipes(Naipe [] naipesGanados) {
         for (Naipe naipe : naipesGanados) {
-            puntajeGanado +=naipe.getValor();
             miBolsa.addLast(naipe);
         }
-        this.puntajeRanking += puntajeGanado;
     }
 
     @Override
